@@ -9,22 +9,20 @@ def add_todo():
     todos.append(todo)
     functions.write_todos(todos)
 
-def delete_todo():
-    for index, todo in enumerate(todos):
-        if st.session_state[index] == True:
-            todos.pop(index)
-            functions.write_todos(todos)
-            del st.session_state[index]
-
 todos = functions.get_todos()
 st.title("My Todo App")
 st.subheader("This is my to-do app for learning python")
 st.write("This app is to increase you productivity")
+st.write("To complete/delete a todo, click on the left of it")
 
 for index,todo in enumerate(todos):
-    checkbox = st.checkbox(todo, key=index)
+    checkbox = st.checkbox(todo, key=todo)
+    if checkbox:
+        todos.pop(index)
+        functions.write_todos(todos)
+        del st.session_state[todo]
+        st._rerun()
+
 
 st.text_input(label="",placeholder="Enter a new todo",
               on_change=add_todo, key='new_todo')
-
-st.button(label="Complete!", on_click=delete_todo, key='complete')
